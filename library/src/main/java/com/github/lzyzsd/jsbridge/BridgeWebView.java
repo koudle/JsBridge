@@ -83,7 +83,12 @@ public class BridgeWebView extends WebView implements WebViewJavascriptBridge {
         @Override
 		public boolean shouldOverrideUrlLoading(WebView view, String url) {
 			if (url.startsWith(BridgeUtil.YY_RETURN_DATA)) { // 如果是返回数据
-				handlerReturnData(url);
+				try {
+					String decodeUrl = URLDecoder.decode(url,"UTF-8");
+					handlerReturnData(decodeUrl);
+				}catch (UnsupportedEncodingException e){
+					e.printStackTrace();
+				}
 				return true;
 			} else if (url.startsWith(BridgeUtil.YY_OVERRIDE_SCHEMA)) { //
 				flushMessageQueue();
@@ -117,7 +122,7 @@ public class BridgeWebView extends WebView implements WebViewJavascriptBridge {
 
         @Override
         public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-            super.onReceivedError(view, errorCode, description, failingUrl);
+			super.onReceivedError(view, errorCode, description, failingUrl);
         }
     }
 
